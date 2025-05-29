@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 
 export default function Step9() {
-  const { formData, updateFormData, setCurrentStep } = useVisaApplication();
+  const { formData, updateFormData, setCurrentStep, saveDraft } = useVisaApplication();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -26,6 +26,13 @@ export default function Step9() {
     updateFormData({ irelandEmployment: data });
     setCurrentStep(10);
     navigate('/visa/step10');
+  };
+
+  const onSubmit = (data: any) => {
+    updateFormData({ personalInfo: data });
+    saveDraft();
+    setCurrentStep(3);
+    navigate("/visa/step10");
   };
 
   const handleBack = () => {
@@ -133,9 +140,10 @@ export default function Step9() {
 
           <NavigationButtons
             onBack={handleBack}
-            onNext={form.handleSubmit(handleNext)}
+            onNext={form.handleSubmit(onSubmit)}
+            onSaveDraft={saveDraft}
             canGoBack={true}
-            canGoNext={true}
+            canGoNext={form.formState.isValid}
           />
         </form>
       </Form>

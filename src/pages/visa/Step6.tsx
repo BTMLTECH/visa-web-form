@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
 
 export default function Step6() {
-  const { formData, updateFormData, setCurrentStep } = useVisaApplication();
+  const { formData, updateFormData, setCurrentStep, saveDraft } = useVisaApplication();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -29,6 +29,13 @@ export default function Step6() {
     updateFormData({ travelCompanions: data });
     setCurrentStep(7);
     navigate('/visa/step7');
+  };
+
+  const onSubmit = (data: any) => {
+    updateFormData({ personalInfo: data });
+    saveDraft();
+    setCurrentStep(3);
+    navigate("/visa/step7");
   };
 
   const handleBack = () => {
@@ -143,9 +150,10 @@ export default function Step6() {
 
           <NavigationButtons
             onBack={handleBack}
-            onNext={form.handleSubmit(handleNext)}
+            onNext={form.handleSubmit(onSubmit)}
+            onSaveDraft={saveDraft}
             canGoBack={true}
-            canGoNext={true}
+            canGoNext={form.formState.isValid}
           />
         </form>
       </Form>

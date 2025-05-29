@@ -1,11 +1,10 @@
-
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom';
-import { useVisaApplication } from '@/contexts/VisaApplicationContext';
-import { generalInfoSchema } from '@/lib/validation/visaSchemas';
-import { NavigationButtons } from '@/components/visa/NavigationButtons';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { useVisaApplication } from "@/contexts/VisaApplicationContext";
+import { generalInfoSchema } from "@/lib/validation/visaSchemas";
+import { NavigationButtons } from "@/components/visa/NavigationButtons";
 import {
   Form,
   FormControl,
@@ -13,16 +12,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Button } from '@/components/ui/button';
-import { Plus, Trash2 } from 'lucide-react';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "@/components/ui/button";
+import { Plus, Trash2 } from "lucide-react";
 
 export default function Step3() {
-  const { formData, updateFormData, setCurrentStep } = useVisaApplication();
+  const { formData, updateFormData, setCurrentStep, saveDraft } =
+    useVisaApplication();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -33,39 +39,59 @@ export default function Step3() {
   const handleNext = (data: any) => {
     updateFormData({ generalInfo: data });
     setCurrentStep(4);
-    navigate('/visa/step4');
+    navigate("/visa/step4");
+  };
+
+  const onSubmit = (data: any) => {
+    updateFormData({ personalInfo: data });
+    saveDraft();
+    setCurrentStep(3);
+    navigate("/visa/step4");
   };
 
   const handleBack = () => {
     setCurrentStep(2);
-    navigate('/visa/step2');
+    navigate("/visa/step2");
   };
 
-  const watchAppliedBefore = form.watch('appliedBefore');
-  const watchIssuedBefore = form.watch('issuedBefore');
-  const watchRefusedBefore = form.watch('refusedBefore');
-  const watchBeenInIreland = form.watch('beenInIrelandBefore');
-  const watchFamilyInIreland = form.watch('familyInIreland');
-  const watchCriminalConvictions = form.watch('criminalConvictions');
+  const watchAppliedBefore = form.watch("appliedBefore");
+  const watchIssuedBefore = form.watch("issuedBefore");
+  const watchRefusedBefore = form.watch("refusedBefore");
+  const watchBeenInIreland = form.watch("beenInIrelandBefore");
+  const watchFamilyInIreland = form.watch("familyInIreland");
+  const watchCriminalConvictions = form.watch("criminalConvictions");
 
   const addFamilyMember = () => {
-    const currentMembers = form.getValues('familyMembers') || [];
-    form.setValue('familyMembers', [
+    const currentMembers = form.getValues("familyMembers") || [];
+    form.setValue("familyMembers", [
       ...currentMembers,
-      { surname: '', forenames: '', dateOfBirth: '', relationship: '', dojReference: '' }
+      {
+        surname: "",
+        forenames: "",
+        dateOfBirth: "",
+        relationship: "",
+        dojReference: "",
+      },
     ]);
   };
 
   const removeFamilyMember = (index: number) => {
-    const currentMembers = form.getValues('familyMembers') || [];
-    form.setValue('familyMembers', currentMembers.filter((_, i) => i !== index));
+    const currentMembers = form.getValues("familyMembers") || [];
+    form.setValue(
+      "familyMembers",
+      currentMembers.filter((_, i) => i !== index)
+    );
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">General Applicant Information</h2>
-        <p className="text-gray-600">Please provide your general background information.</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          General Applicant Information
+        </h2>
+        <p className="text-gray-600">
+          Please provide your general background information.
+        </p>
       </div>
 
       <Form {...form}>
@@ -77,7 +103,10 @@ export default function Step3() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Length of Residence (Years)</FormLabel>
-                  <Select value={field.value?.toString()} onValueChange={(value) => field.onChange(parseInt(value))}>
+                  <Select
+                    value={field.value?.toString()}
+                    onValueChange={(value) => field.onChange(parseInt(value))}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select years" />
@@ -85,7 +114,9 @@ export default function Step3() {
                     </FormControl>
                     <SelectContent>
                       {Array.from({ length: 51 }, (_, i) => (
-                        <SelectItem key={i} value={i.toString()}>{i}</SelectItem>
+                        <SelectItem key={i} value={i.toString()}>
+                          {i}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -100,7 +131,10 @@ export default function Step3() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Length of Residence (Months)</FormLabel>
-                  <Select value={field.value?.toString()} onValueChange={(value) => field.onChange(parseInt(value))}>
+                  <Select
+                    value={field.value?.toString()}
+                    onValueChange={(value) => field.onChange(parseInt(value))}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select months" />
@@ -108,7 +142,9 @@ export default function Step3() {
                     </FormControl>
                     <SelectContent>
                       {Array.from({ length: 12 }, (_, i) => (
-                        <SelectItem key={i} value={i.toString()}>{i}</SelectItem>
+                        <SelectItem key={i} value={i.toString()}>
+                          {i}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -123,11 +159,13 @@ export default function Step3() {
             name="appliedBefore"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Have you applied for an Irish Visa/Preclearance before?</FormLabel>
+                <FormLabel>
+                  Have you applied for an Irish Visa/Preclearance before?
+                </FormLabel>
                 <FormControl>
                   <RadioGroup
-                    value={field.value ? 'true' : 'false'}
-                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={field.value ? "true" : "false"}
+                    onValueChange={(value) => field.onChange(value === "true")}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="true" id="applied-yes" />
@@ -149,11 +187,14 @@ export default function Step3() {
             name="issuedBefore"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Have you ever been issued with an Irish Visa/Preclearance before?</FormLabel>
+                <FormLabel>
+                  Have you ever been issued with an Irish Visa/Preclearance
+                  before?
+                </FormLabel>
                 <FormControl>
                   <RadioGroup
-                    value={field.value ? 'true' : 'false'}
-                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={field.value ? "true" : "false"}
+                    onValueChange={(value) => field.onChange(value === "true")}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="true" id="issued-yes" />
@@ -176,7 +217,10 @@ export default function Step3() {
               name="issuedDetails"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Please provide the location, transaction number and year of issue</FormLabel>
+                  <FormLabel>
+                    Please provide the location, transaction number and year of
+                    issue
+                  </FormLabel>
                   <FormControl>
                     <Textarea {...field} placeholder="Provide details..." />
                   </FormControl>
@@ -191,11 +235,13 @@ export default function Step3() {
             name="refusedBefore"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Have you ever been refused an Irish Visa/Preclearance?</FormLabel>
+                <FormLabel>
+                  Have you ever been refused an Irish Visa/Preclearance?
+                </FormLabel>
                 <FormControl>
                   <RadioGroup
-                    value={field.value ? 'true' : 'false'}
-                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={field.value ? "true" : "false"}
+                    onValueChange={(value) => field.onChange(value === "true")}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="true" id="refused-yes" />
@@ -218,7 +264,10 @@ export default function Step3() {
               name="refusedDetails"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>If you have been refused before, please provide location of application, year and reference number</FormLabel>
+                  <FormLabel>
+                    If you have been refused before, please provide location of
+                    application, year and reference number
+                  </FormLabel>
                   <FormControl>
                     <Textarea {...field} placeholder="Provide details..." />
                   </FormControl>
@@ -236,8 +285,8 @@ export default function Step3() {
                 <FormLabel>Have you ever been in Ireland before?</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    value={field.value ? 'true' : 'false'}
-                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={field.value ? "true" : "false"}
+                    onValueChange={(value) => field.onChange(value === "true")}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="true" id="ireland-yes" />
@@ -275,7 +324,9 @@ export default function Step3() {
                 name="irelandVisitDetails.dojReference"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Department of Justice Reference number (if any)</FormLabel>
+                    <FormLabel>
+                      Department of Justice Reference number (if any)
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -317,11 +368,13 @@ export default function Step3() {
             name="familyInIreland"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Do you have family members living in Ireland?</FormLabel>
+                <FormLabel>
+                  Do you have family members living in Ireland?
+                </FormLabel>
                 <FormControl>
                   <RadioGroup
-                    value={field.value ? 'true' : 'false'}
-                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={field.value ? "true" : "false"}
+                    onValueChange={(value) => field.onChange(value === "true")}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="true" id="family-yes" />
@@ -342,12 +395,17 @@ export default function Step3() {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <h4 className="font-medium">Family Members in Ireland</h4>
-                <Button type="button" onClick={addFamilyMember} variant="outline" size="sm">
+                <Button
+                  type="button"
+                  onClick={addFamilyMember}
+                  variant="outline"
+                  size="sm"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Add Family Member
                 </Button>
               </div>
-              {form.watch('familyMembers')?.map((_, index) => (
+              {form.watch("familyMembers")?.map((_, index) => (
                 <div key={index} className="p-4 border rounded-lg space-y-4">
                   <div className="flex justify-between items-center">
                     <h5 className="font-medium">Family Member {index + 1}</h5>
@@ -366,7 +424,9 @@ export default function Step3() {
                       name={`familyMembers.${index}.surname`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Surname/Family Name (as in Passport)</FormLabel>
+                          <FormLabel>
+                            Surname/Family Name (as in Passport)
+                          </FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -406,7 +466,10 @@ export default function Step3() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Relationship to you</FormLabel>
-                          <Select value={field.value} onValueChange={field.onChange}>
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select relationship" />
@@ -416,7 +479,9 @@ export default function Step3() {
                               <SelectItem value="spouse">Spouse</SelectItem>
                               <SelectItem value="parent">Parent</SelectItem>
                               <SelectItem value="child">Child</SelectItem>
-                              <SelectItem value="extended">Extended Family</SelectItem>
+                              <SelectItem value="extended">
+                                Extended Family
+                              </SelectItem>
                               <SelectItem value="partner">Partner</SelectItem>
                               <SelectItem value="other">Other</SelectItem>
                             </SelectContent>
@@ -430,7 +495,9 @@ export default function Step3() {
                       name={`familyMembers.${index}.dojReference`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Department of Justice Reference number (if any)</FormLabel>
+                          <FormLabel>
+                            Department of Justice Reference number (if any)
+                          </FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -450,11 +517,16 @@ export default function Step3() {
               name="refusedEntry"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Have you ever been refused permission to enter Ireland before?</FormLabel>
+                  <FormLabel>
+                    Have you ever been refused permission to enter Ireland
+                    before?
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
-                      value={field.value ? 'true' : 'false'}
-                      onValueChange={(value) => field.onChange(value === 'true')}
+                      value={field.value ? "true" : "false"}
+                      onValueChange={(value) =>
+                        field.onChange(value === "true")
+                      }
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="true" id="refused-entry-yes" />
@@ -476,11 +548,16 @@ export default function Step3() {
               name="deportationOrder"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Have you ever been notified of a deportation order to leave Ireland?</FormLabel>
+                  <FormLabel>
+                    Have you ever been notified of a deportation order to leave
+                    Ireland?
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
-                      value={field.value ? 'true' : 'false'}
-                      onValueChange={(value) => field.onChange(value === 'true')}
+                      value={field.value ? "true" : "false"}
+                      onValueChange={(value) =>
+                        field.onChange(value === "true")
+                      }
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="true" id="deportation-yes" />
@@ -502,11 +579,15 @@ export default function Step3() {
               name="refusedVisaOtherCountry"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Have you ever been refused a visa to another country?</FormLabel>
+                  <FormLabel>
+                    Have you ever been refused a visa to another country?
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
-                      value={field.value ? 'true' : 'false'}
-                      onValueChange={(value) => field.onChange(value === 'true')}
+                      value={field.value ? "true" : "false"}
+                      onValueChange={(value) =>
+                        field.onChange(value === "true")
+                      }
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="true" id="visa-refused-yes" />
@@ -528,11 +609,17 @@ export default function Step3() {
               name="refusedEntryOtherCountry"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Have you ever been refused entry to, deported from, overstayed permission in, or were otherwise required to leave any country?</FormLabel>
+                  <FormLabel>
+                    Have you ever been refused entry to, deported from,
+                    overstayed permission in, or were otherwise required to
+                    leave any country?
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
-                      value={field.value ? 'true' : 'false'}
-                      onValueChange={(value) => field.onChange(value === 'true')}
+                      value={field.value ? "true" : "false"}
+                      onValueChange={(value) =>
+                        field.onChange(value === "true")
+                      }
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="true" id="entry-refused-yes" />
@@ -550,13 +637,18 @@ export default function Step3() {
             />
           </div>
 
-          {(form.watch('refusedEntry') || form.watch('deportationOrder') || form.watch('refusedVisaOtherCountry') || form.watch('refusedEntryOtherCountry')) && (
+          {(form.watch("refusedEntry") ||
+            form.watch("deportationOrder") ||
+            form.watch("refusedVisaOtherCountry") ||
+            form.watch("refusedEntryOtherCountry")) && (
             <FormField
               control={form.control}
               name="detailsIfYes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>If yes to any of the above please give details</FormLabel>
+                  <FormLabel>
+                    If yes to any of the above please give details
+                  </FormLabel>
                   <FormControl>
                     <Textarea {...field} placeholder="Provide details..." />
                   </FormControl>
@@ -571,11 +663,13 @@ export default function Step3() {
             name="criminalConvictions"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Have you any criminal convictions in any country?</FormLabel>
+                <FormLabel>
+                  Have you any criminal convictions in any country?
+                </FormLabel>
                 <FormControl>
                   <RadioGroup
-                    value={field.value ? 'true' : 'false'}
-                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={field.value ? "true" : "false"}
+                    onValueChange={(value) => field.onChange(value === "true")}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="true" id="criminal-yes" />
@@ -639,7 +733,8 @@ export default function Step3() {
 
           <NavigationButtons
             onBack={handleBack}
-            onNext={form.handleSubmit(handleNext)}
+            onNext={form.handleSubmit(onSubmit)}
+            onSaveDraft={saveDraft}
             canGoBack={true}
             canGoNext={form.formState.isValid}
           />

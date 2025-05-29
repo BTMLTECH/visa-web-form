@@ -99,7 +99,7 @@ const initialFormData: VisaApplicationData = {
 
 export function VisaApplicationProvider({ children }: { children: ReactNode }) {
   const [formData, setFormData] = useState<VisaApplicationData>(initialFormData);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState<number>(1);
 
   const updateFormData = (stepData: Partial<VisaApplicationData>) => {
     setFormData(prev => ({ ...prev, ...stepData }));

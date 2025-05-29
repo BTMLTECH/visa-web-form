@@ -1,9 +1,8 @@
-
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useVisaApplication } from '@/contexts/VisaApplicationContext';
-import { NavigationButtons } from '@/components/visa/NavigationButtons';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useVisaApplication } from "@/contexts/VisaApplicationContext";
+import { NavigationButtons } from "@/components/visa/NavigationButtons";
 import {
   Form,
   FormControl,
@@ -11,13 +10,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Step5() {
-  const { formData, updateFormData, setCurrentStep } = useVisaApplication();
+  const { formData, updateFormData, setCurrentStep, saveDraft } =
+    useVisaApplication();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -27,22 +33,33 @@ export default function Step5() {
   const handleNext = (data: any) => {
     updateFormData({ employmentCollege: data });
     setCurrentStep(6);
-    navigate('/visa/step6');
+    navigate("/visa/step6");
+  };
+
+  const onSubmit = (data: any) => {
+    updateFormData({ personalInfo: data });
+    saveDraft();
+    setCurrentStep(3);
+    navigate("/visa/step6");
   };
 
   const handleBack = () => {
     setCurrentStep(4);
-    navigate('/visa/step4');
+    navigate("/visa/step4");
   };
 
-  const watchEmployed = form.watch('employed');
-  const watchStudent = form.watch('student');
+  const watchEmployed = form.watch("employed");
+  const watchStudent = form.watch("student");
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Employment/College Details</h2>
-        <p className="text-gray-600">Please provide your current employment or education status.</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          Employment/College Details
+        </h2>
+        <p className="text-gray-600">
+          Please provide your current employment or education status.
+        </p>
       </div>
 
       <Form {...form}>
@@ -55,8 +72,8 @@ export default function Step5() {
                 <FormLabel>Are you currently employed?</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    value={field.value ? 'true' : 'false'}
-                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={field.value ? "true" : "false"}
+                    onValueChange={(value) => field.onChange(value === "true")}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="true" id="employed-yes" />
@@ -111,7 +128,12 @@ export default function Step5() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Duration (Years)</FormLabel>
-                      <Select value={field.value?.toString()} onValueChange={(value) => field.onChange(parseInt(value))}>
+                      <Select
+                        value={field.value?.toString()}
+                        onValueChange={(value) =>
+                          field.onChange(parseInt(value))
+                        }
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select years" />
@@ -119,7 +141,9 @@ export default function Step5() {
                         </FormControl>
                         <SelectContent>
                           {Array.from({ length: 51 }, (_, i) => (
-                            <SelectItem key={i} value={i.toString()}>{i}</SelectItem>
+                            <SelectItem key={i} value={i.toString()}>
+                              {i}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -134,7 +158,12 @@ export default function Step5() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Duration (Months)</FormLabel>
-                      <Select value={field.value?.toString()} onValueChange={(value) => field.onChange(parseInt(value))}>
+                      <Select
+                        value={field.value?.toString()}
+                        onValueChange={(value) =>
+                          field.onChange(parseInt(value))
+                        }
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select months" />
@@ -142,7 +171,9 @@ export default function Step5() {
                         </FormControl>
                         <SelectContent>
                           {Array.from({ length: 12 }, (_, i) => (
-                            <SelectItem key={i} value={i.toString()}>{i}</SelectItem>
+                            <SelectItem key={i} value={i.toString()}>
+                              {i}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -204,8 +235,8 @@ export default function Step5() {
                 <FormLabel>Are you currently a student?</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    value={field.value ? 'true' : 'false'}
-                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={field.value ? "true" : "false"}
+                    onValueChange={(value) => field.onChange(value === "true")}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="true" id="student-yes" />
@@ -287,9 +318,10 @@ export default function Step5() {
 
           <NavigationButtons
             onBack={handleBack}
-            onNext={form.handleSubmit(handleNext)}
+            onNext={form.handleSubmit(onSubmit)}
+            onSaveDraft={saveDraft}
             canGoBack={true}
-            canGoNext={true}
+            canGoNext={form.formState.isValid}
           />
         </form>
       </Form>

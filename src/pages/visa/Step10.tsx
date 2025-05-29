@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export default function Step10() {
-  const { formData, updateFormData, setCurrentStep } = useVisaApplication();
+  const { formData, updateFormData, setCurrentStep, saveDraft } = useVisaApplication();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -27,6 +27,13 @@ export default function Step10() {
     updateFormData({ formAssistance: data });
     setCurrentStep(11);
     navigate('/visa/step11');
+  };
+
+  const onSubmit = (data: any) => {
+    updateFormData({ personalInfo: data });
+    saveDraft();
+    setCurrentStep(3);
+    navigate("/visa/step11");
   };
 
   const handleBack = () => {
@@ -136,9 +143,10 @@ export default function Step10() {
 
           <NavigationButtons
             onBack={handleBack}
-            onNext={form.handleSubmit(handleNext)}
+            onNext={form.handleSubmit(onSubmit)}
+            onSaveDraft={saveDraft}
             canGoBack={true}
-            canGoNext={true}
+            canGoNext={form.formState.isValid}
           />
         </form>
       </Form>

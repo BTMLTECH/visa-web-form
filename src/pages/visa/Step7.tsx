@@ -1,9 +1,8 @@
-
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useVisaApplication } from '@/contexts/VisaApplicationContext';
-import { NavigationButtons } from '@/components/visa/NavigationButtons';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useVisaApplication } from "@/contexts/VisaApplicationContext";
+import { NavigationButtons } from "@/components/visa/NavigationButtons";
 import {
   Form,
   FormControl,
@@ -11,12 +10,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function Step7() {
-  const { formData, updateFormData, setCurrentStep } = useVisaApplication();
+  const { formData, updateFormData, setCurrentStep, saveDraft } = useVisaApplication();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -26,21 +25,33 @@ export default function Step7() {
   const handleNext = (data: any) => {
     updateFormData({ irelandContact: data });
     setCurrentStep(8);
-    navigate('/visa/step8');
+    navigate("/visa/step8");
+  };
+
+  const onSubmit = (data: any) => {
+    updateFormData({ personalInfo: data });
+    saveDraft();
+    setCurrentStep(3);
+    navigate("/visa/step8");
   };
 
   const handleBack = () => {
     setCurrentStep(6);
-    navigate('/visa/step6');
+    navigate("/visa/step6");
   };
 
-  const watchKnownPersonally = form.watch('knownPersonally');
+  const watchKnownPersonally = form.watch("knownPersonally");
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Contact/Host in Ireland</h2>
-        <p className="text-gray-600">Please provide contact information for your host or contact in Ireland.</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          Contact/Host in Ireland
+        </h2>
+        <p className="text-gray-600">
+          Please provide contact information for your host or contact in
+          Ireland.
+        </p>
       </div>
 
       <Form {...form}>
@@ -128,8 +139,8 @@ export default function Step7() {
                 <FormLabel>Do you know this person/host personally?</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    value={field.value ? 'true' : 'false'}
-                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={field.value ? "true" : "false"}
+                    onValueChange={(value) => field.onChange(value === "true")}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="true" id="known-yes" />
@@ -239,7 +250,9 @@ export default function Step7() {
                   name="hostDetails.dojReference"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>Department of Justice Reference (if any)</FormLabel>
+                      <FormLabel>
+                        Department of Justice Reference (if any)
+                      </FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -253,9 +266,10 @@ export default function Step7() {
 
           <NavigationButtons
             onBack={handleBack}
-            onNext={form.handleSubmit(handleNext)}
+            onNext={form.handleSubmit(onSubmit)}
+            onSaveDraft={saveDraft}
             canGoBack={true}
-            canGoNext={true}
+            canGoNext={form.formState.isValid}
           />
         </form>
       </Form>

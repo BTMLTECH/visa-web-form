@@ -270,6 +270,7 @@ export default function Step2() {
             onBack={onBack}
             onNext={form.handleSubmit(onSubmit)}
             onSaveDraft={saveDraft}
+            canGoBack={true}
             canGoNext={form.formState.isValid}
           />
         </form>

@@ -1,11 +1,10 @@
-
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom';
-import { useVisaApplication } from '@/contexts/VisaApplicationContext';
-import { passportDetailsSchema } from '@/lib/validation/visaSchemas';
-import { NavigationButtons } from '@/components/visa/NavigationButtons';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { useVisaApplication } from "@/contexts/VisaApplicationContext";
+import { passportDetailsSchema } from "@/lib/validation/visaSchemas";
+import { NavigationButtons } from "@/components/visa/NavigationButtons";
 import {
   Form,
   FormControl,
@@ -13,14 +12,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Button } from '@/components/ui/button';
-import { Plus, Trash2 } from 'lucide-react';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "@/components/ui/button";
+import { Plus, Trash2 } from "lucide-react";
 
 export default function Step4() {
-  const { formData, updateFormData, setCurrentStep } = useVisaApplication();
+  const { formData, updateFormData, setCurrentStep, saveDraft } =
+    useVisaApplication();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -31,34 +31,48 @@ export default function Step4() {
   const handleNext = (data: any) => {
     updateFormData({ passportDetails: data });
     setCurrentStep(5);
-    navigate('/visa/step5');
+    navigate("/visa/step5");
+  };
+
+  const onSubmit = (data: any) => {
+    updateFormData({ personalInfo: data });
+    saveDraft();
+    setCurrentStep(3);
+    navigate("/visa/step5");
   };
 
   const handleBack = () => {
     setCurrentStep(3);
-    navigate('/visa/step3');
+    navigate("/visa/step3");
   };
 
-  const watchFirstPassport = form.watch('firstPassport');
+  const watchFirstPassport = form.watch("firstPassport");
 
   const addPreviousPassport = () => {
-    const currentPassports = form.getValues('previousPassports') || [];
-    form.setValue('previousPassports', [
+    const currentPassports = form.getValues("previousPassports") || [];
+    form.setValue("previousPassports", [
       ...currentPassports,
-      { passportNumber: '', issueDate: '', expiryDate: '' }
+      { passportNumber: "", issueDate: "", expiryDate: "" },
     ]);
   };
 
   const removePreviousPassport = (index: number) => {
-    const currentPassports = form.getValues('previousPassports') || [];
-    form.setValue('previousPassports', currentPassports.filter((_, i) => i !== index));
+    const currentPassports = form.getValues("previousPassports") || [];
+    form.setValue(
+      "previousPassports",
+      currentPassports.filter((_, i) => i !== index)
+    );
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Passport Details</h2>
-        <p className="text-gray-600">Please provide your current passport information.</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          Passport Details
+        </h2>
+        <p className="text-gray-600">
+          Please provide your current passport information.
+        </p>
       </div>
 
       <Form {...form}>
@@ -85,7 +99,10 @@ export default function Step4() {
                 <FormItem>
                   <FormLabel>Passport Type *</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="e.g., Ordinary, Diplomatic, Service" />
+                    <Input
+                      {...field}
+                      placeholder="e.g., Ordinary, Diplomatic, Service"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -143,8 +160,8 @@ export default function Step4() {
                 <FormLabel>Is this your first passport?</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    value={field.value ? 'true' : 'false'}
-                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={field.value ? "true" : "false"}
+                    onValueChange={(value) => field.onChange(value === "true")}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="true" id="first-yes" />
@@ -165,15 +182,22 @@ export default function Step4() {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <h4 className="font-medium">Previous Passports</h4>
-                <Button type="button" onClick={addPreviousPassport} variant="outline" size="sm">
+                <Button
+                  type="button"
+                  onClick={addPreviousPassport}
+                  variant="outline"
+                  size="sm"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Add Previous Passport
                 </Button>
               </div>
-              {form.watch('previousPassports')?.map((_, index) => (
+              {form.watch("previousPassports")?.map((_, index) => (
                 <div key={index} className="p-4 border rounded-lg space-y-4">
                   <div className="flex justify-between items-center">
-                    <h5 className="font-medium">Previous Passport {index + 1}</h5>
+                    <h5 className="font-medium">
+                      Previous Passport {index + 1}
+                    </h5>
                     <Button
                       type="button"
                       onClick={() => removePreviousPassport(index)}
@@ -231,7 +255,8 @@ export default function Step4() {
 
           <NavigationButtons
             onBack={handleBack}
-            onNext={form.handleSubmit(handleNext)}
+            onNext={form.handleSubmit(onSubmit)}
+            onSaveDraft={saveDraft}
             canGoBack={true}
             canGoNext={form.formState.isValid}
           />
