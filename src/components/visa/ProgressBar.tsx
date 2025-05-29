@@ -1,26 +1,26 @@
 
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 interface ProgressBarProps {
   currentStep: number;
   totalSteps: number;
+  className?: string;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalSteps }) => {
+export function ProgressBar({ currentStep, totalSteps, className }: ProgressBarProps) {
   const progress = (currentStep / totalSteps) * 100;
 
   return (
-    <div className="w-full bg-gray-200 rounded-full h-3 mb-4">
+    <div className={cn("w-full bg-gray-200 rounded-full h-2", className)}>
       <div
-        className="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-300 ease-in-out"
+        className="bg-primary h-2 rounded-full transition-all duration-300"
         style={{ width: `${progress}%` }}
       />
-      <div className="flex justify-between text-sm text-gray-600 mt-2">
+      <div className="flex justify-between mt-2 text-sm text-gray-600">
         <span>Step {currentStep} of {totalSteps}</span>
         <span>{Math.round(progress)}% Complete</span>
       </div>
     </div>
   );
-};
-
-export default ProgressBar;
+}

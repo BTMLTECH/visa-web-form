@@ -1,95 +1,102 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Users, Shield, Clock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
+
+  const handleStartApplication = () => {
+    navigate('/visa/step1');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Ireland Visa Application
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Irish Visa Application System
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Complete your Irish visa application online with our comprehensive, step-by-step form. 
-            Secure, efficient, and designed to guide you through every requirement.
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Complete your Irish visa application online with our comprehensive, step-by-step form.
+            Save your progress and resume anytime.
           </p>
-          <Link to="/visa-application">
-            <Button size="lg" className="text-lg px-8 py-4">
-              Start Your Application
-              <FileText className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
-          <Card className="text-center hover:shadow-lg transition-shadow">
+        <div className="max-w-4xl mx-auto">
+          <Card className="mb-8">
             <CardHeader>
-              <FileText className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-              <CardTitle className="text-lg">11-Step Process</CardTitle>
-            </CardHeader>
-            <CardContent>
+              <CardTitle>Welcome to the Irish Visa Application Portal</CardTitle>
               <CardDescription>
-                Comprehensive form covering all visa requirements from travel info to declaration
-              </CardDescription>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <Shield className="h-12 w-12 text-green-600 mx-auto mb-4" />
-              <CardTitle className="text-lg">Secure & Private</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>
-                Your data is stored locally and encrypted. Complete privacy and security guaranteed
-              </CardDescription>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <Clock className="h-12 w-12 text-purple-600 mx-auto mb-4" />
-              <CardTitle className="text-lg">Save Progress</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>
-                Auto-save functionality lets you complete your application at your own pace
-              </CardDescription>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <Users className="h-12 w-12 text-orange-600 mx-auto mb-4" />
-              <CardTitle className="text-lg">User Friendly</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>
-                Intuitive design with clear navigation, validation, and helpful guidance
-              </CardDescription>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Call to Action */}
-        <div className="text-center mt-16">
-          <Card className="max-w-2xl mx-auto bg-white/80 backdrop-blur">
-            <CardHeader>
-              <CardTitle className="text-2xl">Ready to Begin?</CardTitle>
-              <CardDescription className="text-lg">
-                Start your Irish visa application now. The process typically takes 20-30 minutes to complete.
+                This application will guide you through all the necessary steps to apply for an Irish visa.
+                The process consists of 11 detailed steps plus a final declaration.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Link to="/visa-application">
-                <Button size="lg" className="w-full md:w-auto">
-                  Begin Application Process
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div className="text-center p-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-blue-600 font-bold">1</span>
+                  </div>
+                  <h3 className="font-semibold mb-1">Travel Information</h3>
+                  <p className="text-sm text-gray-600">Basic travel details and passport information</p>
+                </div>
+                <div className="text-center p-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-blue-600 font-bold">2</span>
+                  </div>
+                  <h3 className="font-semibold mb-1">Personal Details</h3>
+                  <p className="text-sm text-gray-600">Your personal and contact information</p>
+                </div>
+                <div className="text-center p-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-blue-600 font-bold">3</span>
+                  </div>
+                  <h3 className="font-semibold mb-1">Background Info</h3>
+                  <p className="text-sm text-gray-600">Previous applications and family details</p>
+                </div>
+                <div className="text-center p-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-blue-600 font-bold">4-11</span>
+                  </div>
+                  <h3 className="font-semibold mb-1">Additional Steps</h3>
+                  <p className="text-sm text-gray-600">Employment, family, and host details</p>
+                </div>
+                <div className="text-center p-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                  </div>
+                  <h3 className="font-semibold mb-1">Declaration</h3>
+                  <p className="text-sm text-gray-600">Final confirmation and submission</p>
+                </div>
+                <div className="text-center p-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-purple-600 font-bold">👁</span>
+                  </div>
+                  <h3 className="font-semibold mb-1">Review</h3>
+                  <p className="text-sm text-gray-600">Preview and submit your application</p>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <h4 className="font-semibold text-yellow-800 mb-2">Before You Start:</h4>
+                <ul className="text-sm text-yellow-700 space-y-1">
+                  <li>• Have your passport and travel documents ready</li>
+                  <li>• Prepare employment or study documentation if applicable</li>
+                  <li>• Your progress will be automatically saved as you proceed</li>
+                  <li>• You can resume your application at any time</li>
+                </ul>
+              </div>
+
+              <div className="text-center">
+                <Button 
+                  size="lg" 
+                  onClick={handleStartApplication}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
+                >
+                  Start Visa Application
                 </Button>
-              </Link>
+              </div>
             </CardContent>
           </Card>
         </div>
