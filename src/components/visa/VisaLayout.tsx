@@ -27,7 +27,7 @@ export function VisaLayout() {
       
       <footer className="bg-white border-t mt-12">
         <div className="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-gray-600">
-          © 2024 Irish Visa Application System. All rights reserved.
+          © 2025 All rights reserved.
         </div>
       </footer>
     </div>
